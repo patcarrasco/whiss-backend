@@ -52,7 +52,7 @@ class Api::V1::ChatsController < ApplicationController
 	private
 
 	def chat_params
-		params.permit(:sender_id, :receiver_id)
+		params.permit(:title)
 	end
 
 	def serialize(data)
