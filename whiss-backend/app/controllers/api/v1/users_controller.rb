@@ -49,7 +49,7 @@ class Api::V1::UsersController < ApplicationController
 		if (!!user)
 			if (user.authenticate(params[:password]))
 				session[:user_id] = user.id
-				payload = {data: user}
+				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
 				render json: {token: token}
 			end
