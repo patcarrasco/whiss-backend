@@ -4,7 +4,7 @@ class ChatsChannel < ApplicationCable::Channel
     user = User.find(decodedToken[0]["data"])
     if user
       stream_from "chat_#{user.id}"
-		  ActionCable.server.broadcast("chat_#{user.id}", {type: "chats", data: serialize(user.chats))}
+		  ActionCable.server.broadcast("chat_#{user.id}", serialize(user.chats))
     end
 	end
 
@@ -12,17 +12,17 @@ class ChatsChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    message = data.message
     members = data.members
-  	self.create_chat(message, members)
+    title = data.title
+  	self.create_chat(title, members)
   end
 
-  def create_chat(data, members)
-  	new_chat = Chat.new(title: data.title)
+  def create_chat(title, members)
+  	new_chat = Chat.new(title:title)
 		if (new_chat.save)
 			data.members.each do |id|
 				user_chat = UserChat.create(user_id: id, chat_id: new_chat.id)
-				ActionCable.server.broadcast("chat_#{id}", {type: "chat", data: serialize(new_chat))}
+				ActionCable.server.broadcast("chat_#{id}", serialize(new_chat))
 			end
   	end
   end
