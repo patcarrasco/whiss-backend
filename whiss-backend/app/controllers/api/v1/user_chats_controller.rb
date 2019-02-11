@@ -5,8 +5,8 @@ class Api::V1::UserChatsController < ApplicationController
 		user_chat = UserChat.new(user_chat_params)
 		if user_chat.save
 			# json_response(serialize(chat))
-			ActionCable.server.broadcast "chats_channel_#{user_chat.user_id}", serialize(user_chat)
-			head :ok
+			ActionCable.server.broadcast "chat_#{user_chat.user.id}", serialize(user_chat.chat)
+      head :ok
 		else
 			json_response {"create failed"}
 		end
@@ -29,6 +29,6 @@ class Api::V1::UserChatsController < ApplicationController
 	end
 
 	def serialize(data)
-		UserChatSerializer.new(data).serialized_json
+		ChatSerializer.new(data).serialized_json
 	end
 end

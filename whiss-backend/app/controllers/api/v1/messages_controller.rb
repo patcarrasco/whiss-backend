@@ -26,7 +26,7 @@ class Api::V1::MessagesController < ApplicationController
 
 		if message.save
 			# json_response(serialize(message))
-			ActionCable.server.broadcast "messages_channel_#{message.chat_id}", serialize(message)
+			ActionCable.server.broadcast "message_#{message.chat_id}", serialize(message)
       head :ok
 		else
 			json_response {"create failed"};

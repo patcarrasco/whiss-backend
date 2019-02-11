@@ -9,7 +9,8 @@ class Api::V1::UsersController < ApplicationController
 	def show
 		if User.exists?(params[:id])
 			user = User.find(params[:id])
-			json_response(serialize(user))		else
+			json_response(serialize(user))
+		else
 			json_response {"invalid user"}
 		end
 	end
@@ -17,7 +18,8 @@ class Api::V1::UsersController < ApplicationController
 	def create
 		user = User.new(user_params)
 		if user.save
-			json_response(serialize(user))		else
+			json_response(serialize(user))
+		else
 			json_response {"create failed"}
 		end
 	end
@@ -25,7 +27,8 @@ class Api::V1::UsersController < ApplicationController
 	def update
 		user = User.find(params[:id])
 		if user.update(user_params)
-			json_response(serialize(user))		else
+			json_response(serialize(user))
+		else
 			json_response {"update failed"}
 		end
 	end

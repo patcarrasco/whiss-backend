@@ -1,4 +1,4 @@
 class ChatSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :sender_id, :receiver_id
+  attributes :id, :title
 end
