@@ -20,8 +20,8 @@ chat3 = Chat.create(title: "John Mark, Patricio, Taimur, and Samuel")
 
 # Adding Members
 # Chat 1 - JM, Pat
-UserChat.create(user_id: johnmark.id, chat_id: chat3.id)
-UserChat.create(user_id: patricio.id, chat_id: chat3.id)
+UserChat.create(user_id: johnmark.id, chat_id: chat1.id)
+UserChat.create(user_id: patricio.id, chat_id: chat1.id)
 
 # Chat 2 - Sam, Tai
 UserChat.create(user_id: samuel.id, chat_id: chat2.id)
