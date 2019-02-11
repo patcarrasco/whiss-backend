@@ -34,9 +34,4 @@ class MessagesChannel < ApplicationCable::Channel
   def serialize(data)
     MessageSerializer.new(data).serialized_json
   end
-  def serialize_notification(data)
-    NotificationSerializer.new(data).serialized_json
-  end
-
-  private
 end
