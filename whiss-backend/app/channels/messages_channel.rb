@@ -32,6 +32,6 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def serialize(data)
-    MessageSerializer.new(data).serialized_json
+    MessageBlueprint.render(data)
   end
 end

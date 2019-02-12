@@ -78,6 +78,6 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def serialize(data)
-		UserSerializer.new(data).serialized_json
+		UserBlueprint.render(data)
 	end
 end

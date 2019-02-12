@@ -7,6 +7,6 @@ class WhispersChannel < ApplicationCable::Channel
   end
 
   def serialize(data)
-		# WisprSerializer.new(data).serialized_json
+		# WisprBlueprint.render(data)
 	end
 end

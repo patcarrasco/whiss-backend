@@ -28,6 +28,6 @@ class ChatsChannel < ApplicationCable::Channel
   end
 
 	def serialize(data)
-		ChatSerializer.new(data).serialized_json
+		ChatBlueprint.render(data)
 	end
 end
