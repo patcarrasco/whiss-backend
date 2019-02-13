@@ -1,3 +1,3 @@
 class NotificationBlueprint < Blueprinter::Base
-  fields :user_id
+  fields :message
 end
