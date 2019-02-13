@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_12_143152) do
+ActiveRecord::Schema.define(version: 2019_02_12_145139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 2019_02_12_143152) do
     t.string "image_url"
   end
 
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "friend1_id"
+    t.bigint "friend2_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend1_id"], name: "index_friendships_on_friend1_id"
+    t.index ["friend2_id"], name: "index_friendships_on_friend2_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "chat_id"
@@ -30,6 +39,16 @@ ActiveRecord::Schema.define(version: 2019_02_12_143152) do
     t.datetime "updated_at", null: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.bigint "sender_id"
+    t.bigint "receiver_id"
+    t.boolean "approved", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_requests_on_receiver_id"
+    t.index ["sender_id"], name: "index_requests_on_sender_id"
   end
 
   create_table "user_chats", force: :cascade do |t|

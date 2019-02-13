@@ -3,6 +3,8 @@ User.destroy_all
 UserChat.destroy_all
 Chat.destroy_all
 Message.destroy_all
+Friendship.destroy_all
+Request.destroy_all
 
 
 # Creating Users

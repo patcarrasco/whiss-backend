@@ -1,3 +1,5 @@
 class MessageBlueprint < Blueprinter::Base
-  fields :id, :user_id, :chat_id, :content
+	identifier :id
+  fields :user_id, :chat_id, :content
+  association :user, blueprint: UserBlueprint
 end

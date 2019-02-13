@@ -59,6 +59,21 @@ class Api::V1::UsersController < ApplicationController
 		end
 	end
 
+	def sign_up
+		user = User.new(user_params)
+		if (user.save)
+			if (user.authenticate(params[:password]))
+				session[:user_id] = user.id
+				payload = {data: user.id}
+				token = JWT.encode(payload, "crap")
+				render json: {token: token}
+			end
+		else
+			session[:user_id] = nil
+			json_response "message": "sign up failed"
+		end
+	end
+
 	def logout
 		session[:user_id] = nil
 		reset_session
