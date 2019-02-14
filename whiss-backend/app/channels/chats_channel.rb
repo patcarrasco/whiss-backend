@@ -4,7 +4,7 @@ class ChatsChannel < ApplicationCable::Channel
     user = User.find(decodedToken[0]["data"])
     if user
       stream_from "chat_#{user.id}"
-		  ActionCable.server.broadcast("chat_#{user.id}", serialize(user.chats))
+      ActionCable.server.broadcast("chat_#{user.id}", serialize(user.chats))
     end
 	end
 
@@ -12,15 +12,18 @@ class ChatsChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    members = data.members
-    title = data.title
-  	self.create_chat(title, members)
+    decodedToken = JWT.decode(data["token"], "crap")
+    user = User.find(decodedToken[0]["data"])
+    members = data["members"];
+    members.push(user.id);
+    title = data["title"];
+    self.create_chat(title, members);
   end
 
   def create_chat(title, members)
-  	new_chat = Chat.new(title:title)
-		if (new_chat.save)
-			data.members.each do |id|
+    new_chat = Chat.new(title:title)
+    if (new_chat.save)
+			members.each do |id|
 				user_chat = UserChat.create(user_id: id, chat_id: new_chat.id)
 				ActionCable.server.broadcast("chat_#{id}", serialize(new_chat))
 			end

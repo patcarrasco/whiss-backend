@@ -1,3 +1,8 @@
 class NotificationBlueprint < Blueprinter::Base
-  fields :message
+  view :id do
+    field :id
+  end
+  view :normal do
+    field :message
+  end
 end

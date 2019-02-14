@@ -21,7 +21,7 @@ class MessagesChannel < ApplicationCable::Channel
       # Send notification to each person in the chat, except sender
       new_message.chat.users.each do |user|
         if user.id != new_message.user.id
-          ActionCable.server.broadcast("chat_#{user.id}", NotificationBlueprint.render(message: "New message in #{new_message.chat.title}"))
+          ActionCable.server.broadcast("chat_#{user.id}", NotificationBlueprint.render(message: "New message in #{new_message.chat.title}", view: :normal))
         end
       end
       ActionCable.server.broadcast "message_#{new_message.chat.id}", serialize(new_message)

@@ -12,10 +12,8 @@ class User < ApplicationRecord
 	has_secure_password
 
 	def friends
-		self.friendships2 + self.friendships1
-	end
-	
-	def friendships
-		self.friendships2 + self.friendships1
+		friends1 = self.friendships1.map {|f| f.friend2}
+		friends2 = self.friendships2.map {|f| f.friend1}
+		friends1 + friends2
 	end
 end

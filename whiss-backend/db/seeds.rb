@@ -20,6 +20,14 @@ chat2 = Chat.create(title: "Taimur and Samuel")
 chat3 = Chat.create(title: "John Mark, Patricio, Taimur, and Samuel")
 
 
+Friendship.create(friend1_id: johnmark.id, friend2_id: patricio.id)
+Friendship.create(friend1_id: johnmark.id, friend2_id: taimur.id)
+Friendship.create(friend1_id: samuel.id, friend2_id: johnmark.id)
+Friendship.create(friend1_id: samuel.id, friend2_id: patricio.id)
+Friendship.create(friend1_id: taimur.id, friend2_id: samuel.id)
+Friendship.create(friend1_id: patricio.id, friend2_id: taimur.id)
+
+
 # Adding Members
 # Chat 1 - JM, Pat
 UserChat.create(user_id: johnmark.id, chat_id: chat1.id)
