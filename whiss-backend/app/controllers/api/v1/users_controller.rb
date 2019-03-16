@@ -48,14 +48,14 @@ class Api::V1::UsersController < ApplicationController
 		user = User.find_by(username: params[:username])
 		if (!!user)
 			if (user.authenticate(params[:password]))
-				session[:user_id] = user.id
 				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
 				render json: {token: token}
+			else
+				render json: {message: "password incorrect"}
 			end
 		else
-			session[:user_id] = nil
-			json_response "message": "login failed"
+			render json: {message: "invalid user"}
 		end
 	end
 
@@ -63,22 +63,25 @@ class Api::V1::UsersController < ApplicationController
 		user = User.new(user_params)
 		if (user.save)
 			if (user.authenticate(params[:password]))
-				session[:user_id] = user.id
 				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
 				render json: {token: token}
 			end
 		else
-			session[:user_id] = nil
 			json_response "message": "sign up failed"
 		end
 	end
 
-	def logout
-		session[:user_id] = nil
-		reset_session
-		json_response "message": "logged out"
+	def current_user
+		decodedToken = JWT.decode(params["_json"], "crap")
+		user = User.find(decodedToken[0]["data"])
+		if (!!user)
+			render json: serialize(user)
+		else
+			json_response "message": "sign up failed"
+		end
 	end
+
 
 	private
 

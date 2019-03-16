@@ -16,4 +16,7 @@ class User < ApplicationRecord
 		friends2 = self.friendships2.map {|f| f.friend1}
 		friends1 + friends2
 	end
+	def other_users
+		User.select {|user| user.id != self.id}
+	end
 end
