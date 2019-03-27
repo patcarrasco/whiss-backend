@@ -1,34 +1,45 @@
 class MessagesChannel < ApplicationCable::Channel
-  def subscribed
-    chat = Chat.find(params[:chat_id])
-    stream_from "message_#{chat.id}"
-    ActionCable.server.broadcast "message_#{chat.id}", serialize(chat.messages)
-  end
+	def subscribed
+		chat = Chat.find(params[:chat_id])
+		stream_from "chat_#{chat.id}"
+		self.send_messages(chat.id)
+	end
 
-  def unsubscribed
-  end
+	def unsubscribed
+		stop_all_streams
+	end
 
-  def receive(data)
-    decodedToken = JWT.decode(data["token"], "crap")[0]["data"]
-    user = User.find(decodedToken)
-    create_message({content: data["content"], user_id: user.id, chat_id: data["chat_id"]})
-  end
+	def receive(action)
+		self.reducer(action)
+	end
 
-  def create_message(message)
-    new_message = Message.new(message)
+	def reducer(action)
+		case action["type"]
+		when "NEW_MESSAGE"
+			self.create(action["payload"]) 
+		else
+			puts "Default Match"
+		end
+	end
 
-    if (new_message.save)
-      # Send notification to each person in the chat, except sender
-      new_message.chat.users.each do |user|
-        if user.id != new_message.user.id
-          ActionCable.server.broadcast("chat_#{user.id}", NotificationBlueprint.render(message: "New message in #{new_message.chat.title}", view: :normal))
-        end
-      end
-      ActionCable.server.broadcast "message_#{new_message.chat.id}", serialize(new_message)
-    end
-  end
+	def create(message)
+		new_message = Message.new(message)
+		new_message.user = current_user
+		if new_message.save
+			ActionCable.server.broadcast("chat_#{message["chat_id"]}", {type: "ADD_MESSAGE", payload: serialize(new_message)})
+		end
+	end
 
-  def serialize(data)
-    MessageBlueprint.render(data)
-  end
+	def send_messages(id)
+		chat = Chat.find(id)
+		if chat
+			ActionCable.server.broadcast("chat_#{chat.id}", {type: "SET_MESSAGES", payload: serialize(chat.messages)})
+		else
+			ActionCable.server.broadcast("chat_#{id}", {type: "ERROR", payload:"Not a valid chat"})
+		end
+	end
+
+	def serialize(data)
+		MessageBlueprint.render_as_hash(data)
+	end
 end

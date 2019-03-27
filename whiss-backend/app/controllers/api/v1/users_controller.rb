@@ -50,7 +50,8 @@ class Api::V1::UsersController < ApplicationController
 			if (user.authenticate(params[:password]))
 				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
-				render json: {token: token}
+				user_data ={username: user.username, name: user.name, image_url: user.image_url}
+				render json: {token: token, user: user_data}
 			else
 				render json: {message: "password incorrect"}
 			end
@@ -65,7 +66,7 @@ class Api::V1::UsersController < ApplicationController
 			if (user.authenticate(params[:password]))
 				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
-				render json: {token: token}
+				render json: {token: token, user: user}
 			end
 		else
 			json_response "message": "sign up failed"
