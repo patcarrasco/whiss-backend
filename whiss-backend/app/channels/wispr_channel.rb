@@ -1,4 +1,4 @@
-class WisprsChannel < ApplicationCable::Channel
+class WisprChannel < ApplicationCable::Channel
 	def subscribed
 		if current_user
 			stream_from "user_#{current_user.id}_wisprs"
