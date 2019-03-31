@@ -11,7 +11,7 @@ module ApplicationCable
 		end
 
 		def current_user
-			decoded_hash = decoded_token(self.token)
+			decoded_hash = self.decoded_token(self.token)
 			if !decoded_hash.empty?
 				user_id = decoded_hash[0]["data"]
 				user = User.find(user_id)

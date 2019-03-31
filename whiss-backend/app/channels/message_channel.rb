@@ -27,13 +27,15 @@ class MessageChannel < ApplicationCable::Channel
 		new_message.user = current_user
 		if new_message.save
 			ActionCable.server.broadcast("chat_#{message["chat_id"]}", {type: "ADD_MESSAGE", payload: serialize(new_message)})
+		else
+			puts new_message.errors.full_messages
 		end
 	end
 
 	def send_messages(id)
 		chat = Chat.find(id)
 		if chat
-			ActionCable.server.broadcast("chat_#{chat.id}", {type: "SET_MESSAGES", payload: serialize(chat.messages)})
+			ActionCable.server.broadcast("chat_#{chat.id}", {type: "SET_MESSAGES", payload: serialize(chat.messages.order(created_at: :asc))})
 		else
 			ActionCable.server.broadcast("chat_#{id}", {type: "ERROR", payload:"Not a valid chat"})
 		end

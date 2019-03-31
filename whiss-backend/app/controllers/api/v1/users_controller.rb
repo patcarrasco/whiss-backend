@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
 	before_action :verify_user, only: [:update, :destroy]
 
 	def index
-		users = User.all
+		users = User.all.where.not(id: current_user.id)
 		json_response(serialize(users))
 	end
 
@@ -50,8 +50,7 @@ class Api::V1::UsersController < ApplicationController
 			if (user.authenticate(params[:password]))
 				payload = {data: user.id}
 				token = JWT.encode(payload, "crap")
-				user_data ={username: user.username, name: user.name, image_url: user.image_url}
-				render json: {token: token, user: user_data}
+				render json: {token: token, user: serialize(user)}
 			else
 				render json: {message: "password incorrect"}
 			end
@@ -74,13 +73,10 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def current_user
-		decodedToken = JWT.decode(params["_json"], "crap")
+		request.authorization.split(" ")[1]
+		decodedToken = JWT.decode(request.authorization.split(" ")[1], "crap")
 		user = User.find(decodedToken[0]["data"])
-		if (!!user)
-			render json: serialize(user)
-		else
-			json_response "message": "sign up failed"
-		end
+		user
 	end
 
 
@@ -97,6 +93,6 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def serialize(data)
-		UserBlueprint.render(data)
+		UserBlueprint.render_as_hash(data)
 	end
 end

@@ -59,6 +59,12 @@ Message.create(user_id: patricio.id, content: "Pat in Chat 3", chat_id: chat3.id
 Message.create(user_id: taimur.id, content: "Tai in Chat 3", chat_id: chat3.id)
 Message.create(user_id: samuel.id, content: "Sam in Chat 3", chat_id: chat3.id)
 
+# Creating Wisprs
+Wispr.create(user_id: johnmark.id, content: "Hey, Wispr, from JM")
+Wispr.create(user_id: patricio.id, content: "Hey, Wispr, from Patricio")
+Wispr.create(user_id: taimur.id, content: "Hey, Wispr, from Taimur")
+Wispr.create(user_id: samuel.id, content: "Hey, Wispr, from Samuel")
+
 
 
 

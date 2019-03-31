@@ -80,7 +80,7 @@ class ChatChannel < ApplicationCable::Channel
 	end
 
 	def send_current_chats
-			send_chat(current_user.id, {type: "SET_CHATS", payload: serialize(current_user.chats)})
+			send_chat(current_user.id, {type: "SET_CHATS", payload: serialize(current_user.chats.order(created_at: :desc))})
 	end
 
 	def send_chat(user_id, action) 
